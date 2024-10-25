@@ -26,6 +26,7 @@ def load_user(user_id):
     # Look up user in mock database
     return users_db.get(int(user_id))
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -49,6 +50,8 @@ def register():
     
     return render_template('register.html')
 
+
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
