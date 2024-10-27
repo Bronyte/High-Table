@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="LoginLayout">
+        <h2 class="LoginText">LOGIN</h2>
+        <form action="/login" method="POST">
+            <div class="UsernameLayout">
+                <label for="username">Username</label>
+                <input class="LoginTextBox" type="text" id="username" name="username" required>
+            </div>
+            <div class="PasswordLayout">
+                <label for="password">Password</label>
+                <input class="LoginTextBox" type="password" id="password" name="password" required>
+            </div>
+            <div class="RegisterText">    
+                    <h2 class="RegText">Register</h2>
+                    <h2 class="ForgText">Forgot Password?</h2>
+            </div>
+                 <button class="LoginButton" type="submit">LOGIN</button>
+        </form>
+        
+    </div>
+</body>
+</html>
