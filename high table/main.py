@@ -1,9 +1,11 @@
-from flask import Flask, redirect, url_for, request, render_template, flash
+from flask import Flask, redirect, url_for, request, render_template, flash, session, abort
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash  # For password hashing
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # 10-minute session timeout
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -17,15 +19,18 @@ class User(UserMixin):
         self.username = username
         self.password_hash = password_hash
 
-    # Check password
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Look up user in mock database
     return users_db.get(int(user_id))
 
+@app.before_request
+def before_request():
+    session.permanent = True
+    if not current_user.is_authenticated and request.endpoint not in ['login', 'register']:
+        return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -37,10 +42,7 @@ def register():
             flash('Username already exists.')
             return redirect(url_for('register'))
         
-        # Hash the password for security
         password_hash = generate_password_hash(password)
-        
-        # Create a new user and store in the mock database
         new_user_id = len(users_db) + 1
         new_user = User(id=new_user_id, username=username, password_hash=password_hash)
         users_db[new_user_id] = new_user
@@ -50,7 +52,6 @@ def register():
     
     return render_template('register.html')
 
-
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,7 +59,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        # Find the user by username in the mock database
         user = next((u for u in users_db.values() if u.username == username), None)
         
         if user and user.check_password(password):
@@ -74,6 +74,11 @@ def login():
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.route('/logout')
 @login_required

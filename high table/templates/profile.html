@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ user.username }}!</h1>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>User Profile</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>User ID:</strong> {{ user.id }}</p>
+            <!-- Add more fields as needed -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your App Name</p>
+    </footer>
+</body>
+</html>
