@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Aldrich';
-    src: url(fonts/Aldrich-Regular.ttf)format('truetype');
+    src: url(../fonts/Aldrich-Regular.ttf)format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -9,7 +9,7 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    background-image: url(static/images/wall-grey-background-world-map-the-continent-hd-wallpaper-preview.jpg);
+    background-image: url(../images/wall-grey-background-world-map-the-continent-hd-wallpaper-preview.jpg);
     background-repeat:no-repeat ; /* Background image does not repeat*/
     background-size: cover;/* Background image cover screen*/
 }
@@ -20,6 +20,7 @@ body {
     align-items: center;
     text-align: center;
 }
+
 .Text1 {
     text-align: center;
     margin: 0;

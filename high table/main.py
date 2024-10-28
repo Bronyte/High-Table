@@ -5,7 +5,7 @@ from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # 10-minute session timeout
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout to 30 minutes
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -25,12 +25,6 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return users_db.get(int(user_id))
-
-@app.before_request
-def before_request():
-    session.permanent = True
-    if not current_user.is_authenticated and request.endpoint not in ['login', 'register']:
-        return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -62,6 +56,7 @@ def login():
         user = next((u for u in users_db.values() if u.username == username), None)
         
         if user and user.check_password(password):
+            session.permanent = True  # Enable session timeout
             login_user(user)
             return redirect(url_for('dashboard'))
         
@@ -75,6 +70,16 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/changepassword', methods=['GET', 'POST'])
+#@login_required
+def change_password():
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        current_user.password_hash = generate_password_hash(new_password)
+        flash('Password updated successfully.')
+        return redirect(url_for('dashboard'))
+    
+    return render_template('change_password.html')
 
 @app.errorhandler(404)
 def page_not_found(e):

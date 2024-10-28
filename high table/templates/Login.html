@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login and Registration</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="LoginLayout">
@@ -18,13 +18,12 @@
                 <label for="password">Password</label>
                 <input class="LoginTextBox" type="password" id="password" name="password" required>
             </div>
-            <div class="RegisterText">    
-                    <h2 class="RegText">Register</h2>
-                    <h2 class="ForgText">Forgot Password?</h2>
+            <div class="RegisterText">
+                <h2><a class="RegText" href="{{ url_for('register') }}">Register</a></h2>
+                <h2><a class="ForgText" href="{{ url_for('change_password') }}">Forgot Password?</a></h2>
             </div>
-                 <button class="LoginButton" type="submit">LOGIN</button>
+            <button class="LoginButton" type="submit">LOGIN</button>
         </form>
-        
     </div>
 </body>
 </html>
