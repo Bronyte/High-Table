@@ -95,12 +95,12 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/changepassword', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def change_password():
     if request.method == 'POST':
         new_password = request.form['new_password']
