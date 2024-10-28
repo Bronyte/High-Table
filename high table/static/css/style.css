@@ -4,6 +4,15 @@
     font-weight: normal;
     font-style: normal;
 }
+html, body {
+    height: 100%; /* Ensure full height for the html and body */
+    margin: 0; /* Remove default margin */
+}
+
+body {
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack child elements vertically */
+}
 body {
     font-family:'Aldrich', sans-serif;
     background-color: #f4f4f4;
@@ -13,14 +22,22 @@ body {
     background-repeat:no-repeat ; /* Background image does not repeat*/
     background-size: cover;/* Background image cover screen*/
 }
+main {
+    flex: 1; /* Allow main content to grow and take available space */
+}
 
+footer {
+    text-align: center; /* Center the text within the footer */
+    padding: 20px 0; /* Add some padding for spacing */
+    background-color: rgba(50, 50, 50, 0.6); /* Dark gray with 60% transparency */
+    color: white; /* Set text color to white for contrast */
+}
 .LogRegLayout{
     padding-top: 7rem;
     justify-content: center;
     align-items: center;
     text-align: center;
 }
-
 .Text1 {
     text-align: center;
     margin: 0;
@@ -31,14 +48,14 @@ h1{
     font-size: 4rem;
 }
 button {
-    width: 30%;
-    height:10rem;
+    width: 2px;
+    height:5rem;
     padding: 15px;
     margin: 10px 0;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 5em;
+    font-size: 3em;
     font-family:'Aldrich', sans-serif;
     opacity: 0.6;
 }
@@ -98,14 +115,22 @@ label {
 .ForgText{
     padding-left: 15rem;
 }
+
+.RegText,
+.ForgText {
+    color: white; /* Set the text color to white */
+}
+
+.RegText:hover,
+.ForgText:hover {
+    color: #ccc; /* Change to a lighter shade on hover for better visibility */
+}
+
+
 .LoginButton{
     background-color: #1B2C5D; 
     color: white;
 }
-
-
-
-
 /*RegistrationPage CSS*/
 .RegistrationLayout {
     padding-bottom: 1rem;
