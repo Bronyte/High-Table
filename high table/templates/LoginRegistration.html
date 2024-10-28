@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Login and Registration{% endblock %}
+
+{% block content %}
     <h1 class="Text1">HACKATHON</h1> 
-        <div class="LogRegLayout">
-            <button class="LogRegLoginButton" onclick="location.href='login.html'">LOGIN</button>
-            <h1 class="Text2"> OR</h1>
-            <button class="LogRegRegisterButton" onclick="location.href='register.html'">REGISTER</button>
-        </div>
-</body>
-</html>
+    <div class="LogRegLayout">
+        <button class="LogRegLoginButton" onclick="location.href='{{ url_for('login') }}'">LOGIN</button>
+        <h1 class="Text2"> OR</h1>
+        <button class="LogRegRegisterButton" onclick="location.href='{{ url_for('register') }}'">REGISTER</button>
+    </div>
+{% endblock %}

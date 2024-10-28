@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
     <div class="LoginLayout">
         <h2 class="LoginText">LOGIN</h2>
         <form action="/login" method="POST">
@@ -25,5 +21,4 @@
             <button class="LoginButton" type="submit">LOGIN</button>
         </form>
     </div>
-</body>
-</html>
+{% endblock %}

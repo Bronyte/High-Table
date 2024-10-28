@@ -1,11 +1,11 @@
-from flask import Flask, redirect, url_for, request, render_template, flash, session, abort
+from flask import Flask, redirect, url_for, request, render_template, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout to 30 minutes
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -14,10 +14,15 @@ login_manager.login_view = 'login'
 users_db = {}  # Replace with actual database setup in production
 
 class User(UserMixin):
-    def __init__(self, id, username, password_hash):
+    def __init__(self, id, username, password_hash, first_name, last_name, email, phone, institution):
         self.id = id
         self.username = username
         self.password_hash = password_hash
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.phone = phone
+        self.institution = institution
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -29,16 +34,39 @@ def load_user(user_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        # Get form data
+        first_name = request.form['firstName']
+        last_name = request.form['lastName']
+        email = request.form['email']
+        phone = request.form['phone']
+        institution = request.form['institution']
+        username = email  # assuming username is email for unique identification
         password = request.form['password']
+        confirm_password = request.form['confirmPassword']
         
+        # Validate if the passwords match
+        if password != confirm_password:
+            flash('Passwords do not match.')
+            return redirect(url_for('register'))
+        
+        # Check if the username already exists
         if username in [u.username for u in users_db.values()]:
             flash('Username already exists.')
             return redirect(url_for('register'))
         
+        # Hash the password and store the new user
         password_hash = generate_password_hash(password)
         new_user_id = len(users_db) + 1
-        new_user = User(id=new_user_id, username=username, password_hash=password_hash)
+        new_user = User(
+            id=new_user_id,
+            username=username,
+            password_hash=password_hash,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            institution=institution
+        )
         users_db[new_user_id] = new_user
         
         flash('Registration successful. Please log in.')
@@ -46,6 +74,7 @@ def register():
     
     return render_template('register.html')
 
+# Other routes remain unchanged
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -56,7 +85,7 @@ def login():
         user = next((u for u in users_db.values() if u.username == username), None)
         
         if user and user.check_password(password):
-            session.permanent = True  # Enable session timeout
+            session.permanent = True
             login_user(user)
             return redirect(url_for('dashboard'))
         
@@ -71,7 +100,7 @@ def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/changepassword', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def change_password():
     if request.method == 'POST':
         new_password = request.form['new_password']
