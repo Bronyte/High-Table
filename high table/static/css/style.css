@@ -256,7 +256,7 @@ label {
 .main-content {
     margin-left: 80px;
     padding: 20px;
-    
+    color: white;
 }
 
 .Header {
@@ -347,7 +347,7 @@ label {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
     height: 28rem;
-    width: 40rem;
+    width: 41rem;
     background-color: #1B2C5D;
     border-radius: 25px;
     display: flex;
@@ -363,7 +363,7 @@ label {
     text-align: center;
     border-radius: 25px;
     min-height: 100px;
-    width: 38rem;
+    width: 39rem;
 }
 
 .ChatSection {
@@ -371,13 +371,14 @@ label {
     padding: 15px;
     height: 79.5%;
     border-radius: 25px;
-    width: 13rem; 
+    width: 14rem; 
     position: absolute;
     right: 20px;
     bottom: 0;
     margin-bottom: 2rem;
     padding-left: 20px; 
     opacity: 0.6;
+    color: white;
 }
 
 .ChatTitle {
@@ -389,4 +390,5 @@ label {
 }
 .ImportantDates:hover,.CommitteeMembers:hover,.CallforParticipation:hover,.ContactUs:hover,.Gallery:hover,.MessagefromChairperson:hover,.Sponsors:hover,.Volunteers:hover,.AboutUs:hover,.ChatSection:hover{
     opacity: 0.9; /* Slightly Opaque on hover */
+    cursor: pointer;
 }

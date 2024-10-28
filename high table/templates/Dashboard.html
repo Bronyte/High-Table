@@ -10,43 +10,31 @@
 
 {% block content %}
     <div class="sidebar">
-        <div class="Profile">
-            <img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile">
-        </div>
-        <div class="Dashboard">
-            <img src="{{ url_for('static', filename='Images/Dashboard Icon.png') }}" alt="Dashboard">
-        </div>
-        <div class="Repositories">
-            <img src="{{ url_for('static', filename='Images/Repository.png') }}" alt="Repository">
-        </div>
-        <div class="Appointments">Appointments</div>
-        <div class="Admin">
-            <img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin">
-        </div>
-        <div class="Settings">
-            <img src="{{ url_for('static', filename='Images/Settings.png') }}" alt="Settings">
-        </div>
-        <div class="Logout">
-            <img src="{{ url_for('static', filename='Images/LogOut.png') }}" alt="LogOut">
-        </div>
+        <a href="{{ url_for('profile') }}"><div class="Profile"><img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile"></div></a>
+        <a href="{{ url_for('dashboard') }}"><div class="Dashboard"><img src="{{ url_for('static', filename='Images/Dashboard Icon.png') }}" alt="Dashboard"></div></a>
+        <a href="{{ url_for('repositories') }}"><div class="Repositories"><img src="{{ url_for('static', filename='Images/Repository.png') }}" alt="Repository"></div></a>
+        <a href="{{ url_for('appointments') }}"><div class="Appointments">Appointments</div></a>
+        <a href="{{ url_for('admin') }}"><div class="Admin"><img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin"></div></a>
+        <a href="{{ url_for('settings') }}"><div class="Settings"><img src="{{ url_for('static', filename='Images/Settings.png') }}" alt="Settings"></div></a>
+        <a href="{{ url_for('logout') }}"><div class="Logout"><img src="{{ url_for('static', filename='Images/LogOut.png') }}" alt="LogOut"></div></a>
     </div>
     
     <div class="main-content">
         <div class="Header">HACKATHON</div>
-        <div class="ImportantDates">IMPORTANT DATES</div>
+        <div class="ImportantDates"><h2>IMPORTANT DATES</h2></div>
         <div class="ContentGrid">
-            <div class="CommitteeMembers">Committee Members</div>
-            <div class="Gallery">Gallery</div>
-            <div class="Sponsors">Sponsors</div>
-            <div class="CallforParticipation">Call For Participation</div>
-            <div class="MessagefromChairperson">Message from Chairperson</div>
-            <div class="Volunteers">Volunteers</div>
-            <div class="ContactUs">Contact Us</div>
-            <div class="AboutUs">About Us</div>
+            <div class="CommitteeMembers"><h2>Committee Members</h2></div>
+            <div class="Gallery"><h2>Gallery</h2></div>
+            <div class="Sponsors"><h2>Sponsors</h2></div>
+            <div class="CallforParticipation"><h2>Call For Participation</h2></div>
+            <div class="MessagefromChairperson"><h2>Message from Chairperson</h2></div>
+            <div class="Volunteers"><h2>Volunteers</h2></div>
+            <div class="ContactUs"><h2>Contact Us</h2></div>
+            <div class="AboutUs"><h2>About Us</h2></div>
         </div>
     </div>
     
     <div class="ChatSection">
-        <div class="ChatTitle">Chats</div>
+        <div class="ChatTitle"><h2>Chats</h2></div>
     </div>
 {% endblock %}

@@ -99,6 +99,7 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
+
 @app.route('/changepassword', methods=['GET', 'POST'])
 #@login_required
 def change_password():
@@ -110,15 +111,54 @@ def change_password():
     
     return render_template('change_password.html')
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@app.route('/profile')
+#@login_required
+def profile():
+    pass
+
+@app.route('/repositories')
+#@login_required
+def repositories():
+    pass
+
+@app.route('/appointments')
+#@login_required
+def appointments():
+    pass
+
+@app.route('/admin')
+#@login_required
+def admin():
+    pass
+
+@app.route('/settings')
+#@login_required
+def settings():
+    pass
 
 @app.route('/logout')
-@login_required
+#@login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.errorhandler(400)
+def page_not_found(e):
+    return "Error 400 bad request"
+
+@app.errorhandler(401)
+def page_not_found(e):
+    return "Error 400 unauthorized"
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return "Error 400 forbidden"
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return "Error 400 page not found"
+
 
 if __name__ == "__main__":
     app.run(debug=True)
