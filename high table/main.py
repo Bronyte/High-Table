@@ -78,6 +78,7 @@ def login():
         if user and user.check_password(password):
             session.permanent = True
             login_user(user)
+            user.update_last_login()
             return redirect(url_for('dashboard'))
         
         flash('Invalid username or password.')
