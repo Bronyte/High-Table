@@ -392,3 +392,23 @@ label {
     opacity: 0.9; /* Slightly Opaque on hover */
     cursor: pointer;
 }
+
+
+
+/*ERROR 404 CSS */
+h1 {
+    color: #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 10rem;
+}
+.ErrorLayout{
+    margin-top: 15rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.Error404Button{
+    width: 25rem;
+    background-color: #B01212; 
+    color: white;
+}
