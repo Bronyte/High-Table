@@ -186,21 +186,15 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.errorhandler(400)
-def bad_request(e):
-    return "Error 400: Bad request"
-
-@app.errorhandler(401)
-def unauthorized(e):
-    return "Error 401: Unauthorized"
-
 @app.errorhandler(403)
 def forbidden(e):
-    return "Error 403: Forbidden"
+    flash("Access is forbidden.")
+    return render_template('error.html', error="403 Forbidden"), 403
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html')
+    flash("Page not found")
+    return render_template('error.html', error="404 Forbidden"), 404
 
 if __name__ == "__main__":
     with app.app_context():

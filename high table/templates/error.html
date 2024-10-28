@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error404</title>
+    <title>Error {{ error }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="ErrorLayout">
-        <h1 class="Error404">ERROR 404</h1>
-         <button class="Error404Button" type="submit">Back To Safety</button>
+        <h1 class="Error">ERROR {{ error }}</h1>
+         <a href="{{ url_for('home') }}"><button class="ErrorButton" type="submit" >Back To Safety</button></a>
     </div>
 </body>
 </html>
+
+
