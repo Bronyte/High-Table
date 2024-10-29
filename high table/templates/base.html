@@ -8,10 +8,24 @@
 </head>
 <body>
     <header>
-
+        <!-- Header content can go here -->
     </header>
 
     <main>
+        <!-- Flash messages section -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">
+                            {{ message }}
+                            <span class="close" onclick="this.parentElement.style.display='none';">&times;</span> <!-- Close button -->
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
         {% block content %}
         <!-- Default content can go here if needed -->
         {% endblock %}

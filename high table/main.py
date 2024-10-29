@@ -3,6 +3,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 from db import db, User  # Import the database and User model
+from mail import MailService
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -35,12 +37,12 @@ def register():
         
         # Validate if the passwords match
         if password != confirm_password:
-            flash('Passwords do not match.')
+            flash('Passwords do not match.', 'negative')
             return redirect(url_for('register'))
         
         # Check if the username already exists
         if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-            flash('Username or email already exists.')
+            flash('Username or email already exists.', 'negative')
             return redirect(url_for('register'))
         
         # Hash the password and store the new user
@@ -48,16 +50,12 @@ def register():
         new_user = User(
             username=username,
             password_hash=password_hash,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            phone=phone,
-            institution=institution
+            email=email
         )
         db.session.add(new_user)
         db.session.commit()
         
-        flash('Registration successful. Please log in.')
+        flash('Registration successful. Please log in.', 'positive')
         return redirect(url_for('login'))
     
     return render_template('register.html')
@@ -81,10 +79,25 @@ def login():
             user.update_last_login()
             return redirect(url_for('dashboard'))
         
-        flash('Invalid username or password.')
+        flash('Invalid username or password.', 'negative')
         return redirect(url_for('login'))
     
     return render_template('login.html')
+
+@app.route('/chats', methods=['GET', 'POST'])
+@login_required
+def chats():
+    if request.method == 'POST':
+        recipient = request.form['recipient']
+        message_content = request.form['message']
+        
+        # Send the chat message via email
+        mail_service.send_chat_message(recipient, current_user.username, message_content)
+        
+        flash('Chat message sent!', 'positive')
+        return redirect(url_for('chats'))
+
+    return render_template('chats.html')
 
 @app.route('/dashboard')
 @login_required
@@ -140,7 +153,7 @@ def add_user():
 
     # Check if the user already exists
     if User.query.filter_by(username=username).first():
-        flash("User with that username already exists.")
+        flash("User with that username already exists.", 'negative')
         return redirect(url_for('admin'))
 
     # Add new user
@@ -149,7 +162,7 @@ def add_user():
                     last_name=last_name, email=email, phone=phone, institution=institution)
     db.session.add(new_user)
     db.session.commit()
-    flash("User added successfully.")
+    flash("User added successfully.", 'netural')
     return redirect(url_for('admin'))
 
 @app.route('/admin/delete_user/<int:user_id>', methods=['POST'])
@@ -164,19 +177,22 @@ def delete_user(user_id):
     if user:
         db.session.delete(user)
         db.session.commit()
-        flash("User deleted successfully.")
+        flash("User deleted successfully.", 'neutral')
     else:
-        flash("User not found.")
+        flash("User not found.", 'negative')
     return redirect(url_for('admin'))
 
 @app.route('/changepassword', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    if not current_user.is_authenticated:
+        flash('Please log in to access this page.', 'negative')  # Set category to 'negative'
+        return redirect(url_for('login'))
     if request.method == 'POST':
         new_password = request.form['new_password']
         current_user.password_hash = generate_password_hash(new_password)
         db.session.commit()  # Commit changes to the database
-        flash('Password updated successfully.')
+        flash('Password updated successfully.', 'positive')
         return redirect(url_for('dashboard'))
     
     return render_template('change_password.html')
@@ -189,13 +205,25 @@ def logout():
 
 @app.errorhandler(403)
 def forbidden(e):
-    flash("Access is forbidden.")
+    flash("Access is forbidden.", 'negative')
     return render_template('error.html', error="403 Forbidden"), 403
 
 @app.errorhandler(404)
 def page_not_found(e):
-    flash("Page not found")
+    flash("Page not found", 'negative')
     return render_template('error.html', error="404 Forbidden"), 404
+
+
+@app.route('/test_messages')
+def test_messages():
+    flash('Success! The operation completed successfully.', 'positive')
+    flash('This is a neutral message for your information.', 'neutral')
+    flash('Error! Something went wrong.', 'negative')
+    return redirect(url_for('some_view'))
+
+@app.route('/some_view')
+def some_view():
+    return render_template('base.html')
 
 if __name__ == "__main__":
     with app.app_context():

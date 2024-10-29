@@ -393,8 +393,6 @@ label {
     cursor: pointer;
 }
 
-
-
 /*ERROR CSS */
 h1 {
     color: #ccc;
@@ -413,5 +411,39 @@ h1 {
     color: white;
 }
 
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    align-content: center;
+}
+.flashes li {
+    position: relative; /* For positioning the close button */
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+    color: #fff; /* Text color */
+    display: flex; /* For flexbox layout */
+    text-align: center;
+    border: 1px solid transparent; /* Border for consistent sizing */
+}
+
+.flashes li.positive {
+    color: #28a745; /* Green for positive messages */
+}
+
+.flashes li.neutral {
+    color: #ffc107; /* Orange for neutral messages */ 
+}
+
+.flashes li.negative {
+    color: #dc3545; /* Red for negative messages */ 
+}
+
+.close {
+    cursor: pointer; /* Change cursor to pointer on hover */
+    font-weight: bold;
+    margin-left: 10px; /* Space between message and close */
+}
 
 
