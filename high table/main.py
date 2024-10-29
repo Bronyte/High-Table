@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, request, render_template, flash, ses
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
-from db import db, User  # Import the database and User model
+from db import db, User, UserProfile  # Import the database and other models
 from mail import MailService
 
 
@@ -62,8 +62,10 @@ def register():
 
 @app.route('/')
 def home():
+    if current_user.is_authenticated:
+        # Redirect to the dashboard if the user is logged in
+        return redirect(url_for('dashboard'))
     return render_template('LoginRegistration.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -104,10 +106,32 @@ def chats():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/profile')
-@login_required
+@app.route('/profile/', methods=['GET', 'POST'])
+@login_required  # Ensure the user is logged in
 def profile():
-    return render_template('profile.html')
+    # Query the database for the user's profile
+    user_profile = UserProfile.query.filter_by(user_id=current_user.id).first()
+
+    if request.method == 'POST':
+        
+        if user_profile:
+            user_profile.firstname = request.form['firstName']
+            user_profile.surname = request.form['lastName']
+            user_profile.phone_number = request.form['phone']
+            user_profile.type_of_institution = request.form['institutionType']
+            user_profile.name_of_institution = request.form['institutionName']
+            user_profile.participated_in_past_competitions = request.form['pastCompetitions'].lower() == 'true'
+            user_profile.preferred_coding_language = request.form['preferredLanguage']
+            user_profile.preferred_ide = request.form['preferredIDE']
+
+            db.session.commit()  # Save changes to the database
+
+        return redirect(url_for('profile'))  # Redirect back to the profile page
+
+    # If the request is GET, render the profile page
+    return render_template('profile.html', profile=user_profile)
+
+
 
 @app.route('/settings')
 @login_required
@@ -133,7 +157,7 @@ def admin():
     #    return redirect(url_for('dashboard'))
     
     users = User.query.all()
-    return render_template('admin.html', users=users)
+    return render_template('AdminPanel.html', users=users)
 
 @app.route('/admin/add_user', methods=['POST'])
 @login_required

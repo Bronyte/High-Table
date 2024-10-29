@@ -9,16 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <div class="sidebar">
-        <a href="{{ url_for('profile') }}"><div class="Profile"><img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile"></div></a>
-        <a href="{{ url_for('dashboard') }}"><div class="Dashboard"><img src="{{ url_for('static', filename='Images/Dashboard Icon.png') }}" alt="Dashboard"></div></a>
-        <a href="{{ url_for('repositories') }}"><div class="Repositories"><img src="{{ url_for('static', filename='Images/Repository.png') }}" alt="Repository"></div></a>
-        <a href="{{ url_for('appointments') }}"><div class="Appointments">Appointments</div></a>
-        <a href="{{ url_for('admin') }}"><div class="Admin"><img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin"></div></a>
-        <a href="{{ url_for('settings') }}"><div class="Settings"><img src="{{ url_for('static', filename='Images/Settings.png') }}" alt="Settings"></div></a>
-        <a href="{{ url_for('logout') }}"><div class="Logout"><img src="{{ url_for('static', filename='Images/LogOut.png') }}" alt="LogOut"></div></a>
-    </div>
-    
     <div class="main-content">
         <div class="Header">HACKATHON</div>
         <div class="ImportantDates"><h2>IMPORTANT DATES</h2></div>

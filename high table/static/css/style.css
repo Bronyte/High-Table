@@ -446,4 +446,148 @@ h1 {
     margin-left: 10px; /* Space between message and close */
 }
 
+/* Profile Page CSS */
+.ProfileLayout {
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
+h2.ProfilePageText {
+    font-size: 4.5rem;
+    margin-bottom: 20px;
+}
+
+.ProfileTextBox {
+    width: 30%; /* Adjust the width as needed */
+    height: 1rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    opacity: 0.8; /* Slightly more opaque for better visibility */
+    font-size: 1.5rem; /* Adjust font size for profile inputs */
+}
+
+.ProfileButton {
+    margin-top: 2rem;
+    width: 15rem;
+    background-color: #B01212; /* Red background */
+    color: white;
+    font-size: 2rem; /* Increase button text size */
+    border: none;
+    border-radius: 5px;
+}
+
+.ProfileButton:hover {
+    opacity: 0.9; /* Slightly Opaque on hover */
+}
+
+
+
+/****AdminPanel CSS****/
+.AdminPanelLayout {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+h1{
+    padding: 0;
+    color:black;
+    text-align: center;
+}
+.AddNewUserText{
+    padding-left: 0;
+    margin: 0;
+}
+.RefreshButton{
+    width: 1rem;
+    height: 1rem;
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #1B2C5D;
+
+}
+th {/*Header cell in Table*/
+    background-color: #f2f2f2;
+    font-size: 1.5rem;
+}
+tr{/*row in cells*/
+    padding:0;
+}
+.UsernameAdminPanel,.PasswordAdminPanel,.FirstNameAdminPanel,.FirstNameAdminPanel,.LastNameAdminPanel,.EmailAdminPanel,.PhoneAdminPanel,.InstitutionAdminPanel{
+ padding: 0;
+}
+.AddUserButton {
+    margin-left: 9rem;
+    padding: 8px 12px;
+    background-color:  #1B2C5D; 
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 20rem;
+    height: 4rem;
+}
+    
+
+.AddNewUserLayout{
+    text-align: center;
+    
+}
+/* Dropdown Button */
+.ModifyButton {
+    height: 2rem;
+    font-size: 1rem;
+    padding: 0;
+    margin: 4px;
+    background-color: #00c230; 
+    color: white;
+    width: 6rem;
+    
+}
+  
+  /* Dropdown button on hover & focus */
+ .ModifyButton:focus {
+    background-color: #B01212;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    margin-left: 106rem;
+    display: none;
+    position: absolute;
+    background-color: #1B2C5D;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;}
