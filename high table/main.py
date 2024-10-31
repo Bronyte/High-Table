@@ -22,6 +22,8 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+# Routes
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -59,14 +61,12 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('register.html')
-
 @app.route('/')
 def home():
     if current_user.is_authenticated:
         # Redirect to the dashboard if the user is logged in
         return redirect(url_for('dashboard'))
     return render_template('LoginRegistration.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -87,7 +87,12 @@ def login():
         return redirect(url_for('login'))
     
     return render_template('login.html')
-
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Logs the user out, clearing session data for Flask-Login
+    flash("You have been logged out.", "positive")
+    return redirect(url_for('login'))  # Redirects to the login page after logging out
 @app.route('/chats', methods=['GET', 'POST'])
 @login_required
 def chats():
@@ -103,11 +108,8 @@ def chats():
 
     return render_template('chats.html')
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
 
+    return render_template('dashboard.html')
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required  # Ensure the user is logged in
 def profile():
@@ -133,24 +135,89 @@ def profile():
 
     # If the request is GET, render the profile page
     return render_template('ViewProfile.html', user=user_profile)
+@app.route('/viewprofile')
+@login_required
+def view_profile():
+    # Retrieve the user's profile from the database
+    profile = UserProfile.query.filter_by(user_id=current_user.id).first()
+
+    if not profile:
+        flash('Profile not found!', 'negative')
+        return redirect(url_for('dashboard'))
+
+    # Render the profile view template with the retrieved profile data
+    return render_template('ViewProfile.html', profile=profile)
 
 
 
+    logout_user()
+    return redirect(url_for('login'))
+# Change Info
+@app.route('/changepassword', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if not current_user.is_authenticated:
+        flash('Please log in to access this page.', 'negative')
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        current_user.password_hash = generate_password_hash(new_password)
+        db.session.commit()
+        flash('Password updated successfully.', 'positive')
+        return redirect(url_for('dashboard'))
+    
+    return render_template('change_password.html')
+@app.route('/changeprofile', methods=['GET', 'POST'])
+@login_required
+def change_profile():
+    # Ensure the user is authenticated
+    if not current_user.is_authenticated:
+        flash('Please log in to access this page.', 'negative')
+        return redirect(url_for('login'))
+
+    # Retrieve the current user's profile
+    profile = UserProfile.query.filter_by(user_id=current_user.id).first()
+
+    if request.method == 'POST':
+        # Update profile fields based on form input
+        profile.firstname = request.form.get('firstname')
+        profile.surname = request.form.get('surname')
+        profile.phone_number = request.form.get('phone_number')
+        profile.type_of_institution = request.form.get('type_of_institution')
+        profile.name_of_institution = request.form.get('name_of_institution')
+        profile.participated_in_past_competitions = request.form.get('participated_in_past_competitions') == 'on'
+        profile.preferred_coding_language = request.form.get('preferred_coding_language')
+        profile.preferred_ide = request.form.get('preferred_ide')
+        profile.message = request.form.get('message')
+
+        # Commit changes to the database
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('dashboard'))
+
+    # Render the profile change form with existing user data
+    return render_template('ChangeProfile.html', profile=profile)
+
+
+# Dashboard routes
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('Dashboard.html')
 @app.route('/settings')
 @login_required
 def settings():
-    return render_template('settings.html')
-
+    return render_template('Settings.html')
 @app.route('/appointments')
 @login_required
 def appointments():
     pass
-
 @app.route('/repositories')
 @login_required
 def repositories():
     pass
 
+# Create ADMIN
 def create_admin_user():
     # Check if an admin user with username "admin" already exists
     admin_user = User.query.filter_by(username="admin").first()
@@ -194,6 +261,7 @@ def admin():
 
     return render_template('AdminPanel.html', users=user_data)
 
+# User management
 @app.route('/edit_user/<int:user_id>', methods=['POST'])
 @login_required
 def edit_user(user_id):
@@ -210,7 +278,6 @@ def edit_user(user_id):
         flash('User not found.', 'negative')
     
     return redirect(url_for('admin'))
-
 @app.route('/promote_user/<int:user_id>', methods=['POST'])
 @login_required
 def promote_user(user_id):
@@ -226,7 +293,6 @@ def promote_user(user_id):
         flash('User not found.', 'negative')
 
     return redirect(url_for('admin'))
-
 @app.route('/demote_user/<int:user_id>', methods=['POST'])
 @login_required
 def demote_user(user_id):
@@ -242,8 +308,7 @@ def demote_user(user_id):
         flash('User not found.', 'negative')
 
     return redirect(url_for('admin'))
-
-@app.route('/add_user', methods=['POST'])
+@app.route('/add_user<int:user_id>', methods=['POST'])
 @login_required
 def add_user():
     if current_user.role != 'admin user':
@@ -259,7 +324,6 @@ def add_user():
     
     flash('User added successfully!', 'positive')
     return redirect(url_for('admin'))
-
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):
@@ -282,32 +346,11 @@ def delete_user(user_id):
     return redirect(url_for('admin'))
 
 
-@app.route('/changepassword', methods=['GET', 'POST'])
-@login_required
-def change_password():
-    if not current_user.is_authenticated:
-        flash('Please log in to access this page.', 'negative')  # Set category to 'negative'
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        new_password = request.form['new_password']
-        current_user.password_hash = generate_password_hash(new_password)
-        db.session.commit()  # Commit changes to the database
-        flash('Password updated successfully.', 'positive')
-        return redirect(url_for('dashboard'))
-    
-    return render_template('change_password.html')
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-
+# Error Handling
 @app.errorhandler(403)
 def forbidden(e):
     flash("Access is forbidden.", 'negative')
     return render_template('error.html', error="403 Forbidden"), 403
-
 @app.errorhandler(404)
 def page_not_found(e):
     flash("Page not found", 'negative')
@@ -317,7 +360,7 @@ def page_not_found(e):
 # Run the create_admin_user function in app startup
 if __name__ == "__main__":
     with app.app_context():
-        db.drop_all()
+        #db.drop_all()
         db.create_all()  # Create tables if they don't exist
         create_admin_user()  # Call the function to create the admin user
     app.run(debug=True)

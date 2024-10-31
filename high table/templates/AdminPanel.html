@@ -1,20 +1,17 @@
 {% extends "base.html" %}
 
-{% block head %}
+{% block content %}
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-{% endblock %}
-
-{% block content %}
+</head>
 <body>
     <div class="AdminPanelLayout">
-        <h1>Admin Panel</h1>
-
+        <h2>Admin Panel</h2>
         <!-- User Table -->
         <div class="UsersTable">
-            <h2>All Users</h2>
             <table class="TableLayout">
                 <thead>
                     <tr>
@@ -57,9 +54,7 @@
             </table>
         </div>
 
-        <!-- Add New User Button -->
-        <h2>Add New User</h2>
-        <button onclick="openWindow('{{ url_for('register') }}')">Add User</button>
+        
     </div>
 
     <script>

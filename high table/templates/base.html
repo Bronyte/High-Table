@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Your App Title{% endblock %}</title>
+    <title>{% block title %}High Table{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -12,52 +12,30 @@
     </header>
 
     <!-- Navigation Bar -->
-    {% if current_user.is_authenticated %} 
-        <div class="sidebar">
-            <a href="{{ url_for('profile') }}">
-                <div class="Profile"><img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile"></div>
-            </a>
-            <a href="{{ url_for('dashboard') }}">
-                <div class="Dashboard"><img src="{{ url_for('static', filename='Images/Dashboard Icon.png') }}" alt="Dashboard"></div>
-            </a>
-            <a href="{{ url_for('repositories') }}">
-                <div class="Repositories"><img src="{{ url_for('static', filename='Images/Repository.png') }}" alt="Repository"></div>
-            </a>
-            {% if current_user.role == "admin user" %}
-                <a href="{{ url_for('admin') }}">
-                    <div class="Admin"><img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin"></div>
-                </a>
-            {% endif %}
-            <a href="{{ url_for('settings') }}">
-                <div class="Settings"><img src="{{ url_for('static', filename='Images/Settings.png') }}" alt="Settings"></div>
-            </a>
-            <a href="{{ url_for('logout') }}">
-                <div class="Logout"><img src="{{ url_for('static', filename='Images/LogOut.png') }}" alt="LogOut"></div>
-            </a>
-        </div>
-    {% endif %}
+    {% include 'Sidebar.html' %}
 
     <main>
+        <div>
+            <!-- Flash messages section -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">
+                                {{ message }}
+                                <span class="close" onclick="this.parentElement.style.display='none';">&times;</span> <!-- Close button -->
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
 
-        <!-- Flash messages section -->
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for category, message in messages %}
-                        <li class="{{ category }}">
-                            {{ message }}
-                            <span class="close" onclick="this.parentElement.style.display='none';">&times;</span> <!-- Close button -->
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        {% block content %}
-        <!-- Default content can go here if needed -->
-        {% endblock %}
+        <div>
+            {% block content %}
+            <!-- Default content can go here if needed -->
+            {% endblock %}
+        </div>
     </main>
 </body>
 </html>
-
-

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="ChangeProfileLayout">
+        <div class="ProfilePic"><img src="Images/Profile.png" alt="Profile"></div>
+        <form id="ChangeProfileLayoutForm">
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="UserName">UserName:</label>
+                <input class="ChangeProfileTextBox" type="text" id="UserName" name="UserName" required style="width: 35.5rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="firstName">First Name:</label>
+                <input class="ChangeProfileTextBox" type="text" id="firstName" name="firstName" required style="width: 34.5rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="lastName">Last Name:</label>
+                <input class="ChangeProfileTextBox" type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="email">Email Address:</label>
+                <input class="ChangeProfileTextBox" type="email" id="email" name="email" required style="width: 31.5rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="phone">Phone Number:</label>
+                <input class="ChangeProfileTextBox" type="tel" id="phone" name="phone" required style="width: 30.5rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="institution">Institution:</label>
+                <input class="ChangeProfileTextBox" type="text" id="institution" name="institution" required style="width: 34.5rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="PreferredCodingChangeProfile">Preferred Coding:</label>
+                <input class="ChangeProfileTextBox" type="text" id="PreferredCodingChangeProfile" name="PreferredCodingChangeProfile" required style="width: 27.5rem;">
+            </div>
+            <div class=""ChangeProfileLayoutFormGroup">
+                <label for="PreferredIDEChangeProfile">Preferred IDE:</label>
+                <input class="ChangeProfileTextBox" type="text" id="PreferredIDEChangeProfile" name="PreferredIDEChangeProfile" required style="width: 31rem;">
+            </div>
+            <div class="ChangeProfileLayoutFormGroup">
+                <label for="BioChangeProfile">Bio:</label>
+                <input class="ChangeProfileTextBox" type="text" id="BioChangeProfile" name="BioChangeProfile" required style="width: 42rem;">
+            </div>
+           
+        </form>
+        <div class="ChangeProfileButtons"> 
+             <button class="ChangeProfileBackButton">BACK</button>
+            <button class="ChangeProfileButton" type="submit">SUBMIT</button>
+        </div>
+          
+    </div>
+</body>
+</html>

@@ -160,8 +160,6 @@ h2 {
 
 
 
-
-
 /*ChangePassword CSS*/
 .PasswordLayout {
     justify-content: center;
@@ -254,7 +252,7 @@ label {
 
 /* Main Content */
 .main-content {
-    margin-left: 80px;
+    margin-left: 8rem; /* Adjust based on sidebar width */
     padding: 20px;
     color: white;
 }
@@ -591,3 +589,257 @@ tr{/*row in cells*/
   
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
   .show {display:block;}
+
+
+  
+
+/********* View Profile CSS **********/
+
+.ViewPofileLayout{
+    margin-top: 1rem;
+    margin-left: 4rem;
+    width: 90%;
+    height: 90vh;
+    padding: 20px;
+    background-color: #1B2C5D;
+    color: #ddd;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    opacity: 0.9;
+}
+.ProfilePic {
+    padding: 3rem;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+.ProfilePic img{
+    height: 10rem;
+    width: 10rem;
+}
+h2 {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 500;
+}
+.InstitutionViewProfile{
+    font-size: 2rem;
+    color: #00c230;
+}
+.Email-Phone {
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    font-size: 1.8rem;
+    color: #888;
+}
+.EmailViewProfile{
+    padding-right: 2rem;
+}
+
+.Info{
+    font-size: 2rem;
+}
+.Info span {
+    color: #aaa;
+}
+.Message {
+    margin-left: 10rem;
+    margin-right: 10rem;
+    text-align: center;
+    font-size:2rem;
+    color: #ddd;
+}
+.BackButton {
+    width: 13rem;
+    height: 5rem;
+    background-color: #B01212;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 3rem;
+    position: absolute;
+    bottom: 5rem; 
+    left: 8rem;
+}
+
+
+
+
+/********* Setting CSS ************/
+
+.SettingsContainer{  
+    margin-left: 43rem;
+    margin-top: 1rem;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.menu-button {
+    width: 40%;
+    background-color: #1B2C5D;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.menu-button:hover {
+    opacity: 0.9;
+}
+.SettingsBackButton {
+    margin-left: 51rem;
+    width: 13rem;
+    height: 5rem;
+    background-color: #B01212;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 3rem;
+  
+}
+
+
+
+
+
+
+/*Change Profile CSS*/
+.ChangeProfileLayout {
+    padding-bottom: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.ChangeProfileLayout label {
+    font-size: 2rem; 
+}
+
+.ChangeProfileTextBox{
+    width: 30%;
+    height: 1rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    opacity: 0.6;
+}
+.ChangeProfileButtons{
+    margin-top: 10rem;
+    display: flex;
+}
+.ChangeProfileButton {
+    width: 13rem;
+    height: 4rem;
+    background-color: #1B2C5D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 2rem;
+    position: absolute;
+    bottom: 6rem;
+    right: 25rem;
+  
+}
+.ChangeProfileBackButton {
+    width: 13rem;
+    height: 4rem;
+    background-color: #B01212;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 2rem;
+    position: absolute;
+    bottom: 6rem;
+    left: 25rem;
+}
+
+
+
+
+
+
+/************ Privacy Policy ************/
+.privacy-container {
+    margin-left: 15rem;
+    margin-top: 5rem;
+    color: #ddd;
+    width: 70%;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    opacity: 0.6;
+}
+
+.privacy-title {
+    background-color: #B01212;
+    color: #fff;
+    font-size: 5rem;
+    padding: 10px 20px ;
+    border-radius: 10px;
+    margin-top: -40px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.privacy-description {
+    background-color: #1B2C5D;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-size: 2rem;
+    line-height: 1.5;
+}
+
+
+.privacy-list {
+    background-color: #1B2C5D;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    margin: 0;
+    font-size: 3rem;
+    list-style-position: inside;
+}
+.privacy-list2 {
+    background-color: #1B2C5D;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    margin-top: 2rem;
+    font-size: 3rem;
+    list-style-position: inside;
+}
+.privacy-list3 {
+    background-color: #1B2C5D;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    margin-top: 2rem;
+    font-size: 2.3rem;
+    list-style-position: inside;
+}
+ul .privacy-list{
+    margin-left: 10rem;
+}
+
+.privacy-list li {
+    margin: 10px 0;
+    padding-left: 20px;
+}
