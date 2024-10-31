@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, render_template, flash, session
+from flask import Flask, jsonify, redirect, url_for, request, render_template, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
@@ -70,15 +70,17 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        login_input = request.form['username']  # This can be either the username or email
         password = request.form['password']
         
-        user = User.query.filter_by(username=username).first()
+        # Check if the input is a username or email and find the user
+        user = User.query.filter((User.username == login_input) | (User.email == login_input)).first()
         
-        if user and user.check_password(password):
+        if user and check_password_hash(user.password_hash, password):
             session.permanent = True
             login_user(user)
-            user.update_last_login()
+            user.update_last_login()  # Update the last login time if you have that method
+            flash(f"Logged in as {user.username} with role: {user.role}", "positive") 
             return redirect(url_for('dashboard'))
         
         flash('Invalid username or password.', 'negative')
@@ -148,63 +150,134 @@ def appointments():
 def repositories():
     pass
 
-@app.route('/admin', methods=['GET', 'POST'])
-@login_required 
-def admin():
-    # Only allow access if the user is an admin (replace with your logic if needed)
-    #if not current_user.is_authenticated or current_user.username != "admin":
-    #    flash("You do not have permission to access this page.")
-    #    return redirect(url_for('dashboard'))
-    
-    users = User.query.all()
-    return render_template('AdminPanel.html', users=users)
+def create_admin_user():
+    # Check if an admin user with username "admin" already exists
+    admin_user = User.query.filter_by(username="admin").first()
+    if not admin_user:
+        # Create the admin user with username "admin" and password "admin"
+        admin_user = User(
+            username="admin",
+            password_hash=generate_password_hash("admin"),
+            email="admin@admin.com",  # Use a placeholder email for admin
+            role="admin user"  # Ensure this matches the expected role name
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Admin user created with username 'admin' and password 'admin'.")
 
-@app.route('/admin/add_user', methods=['POST'])
+
+
+@app.route('/admin')
 @login_required
-def add_user():
-    #if not current_user.is_authenticated or current_user.username != "admin":
-    #    flash("You do not have permission to access this page.")
-    #    return redirect(url_for('dashboard'))
-    
-    # Get form data
-    username = request.form.get('username')
-    password = request.form.get('password')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    email = request.form.get('email')
-    phone = request.form.get('phone')
-    institution = request.form.get('institution')
+def admin():
+    # Check if the current user is an admin
+    if current_user.role != 'admin user':
+        return "Unauthorized", 403
 
-    # Check if the user already exists
-    if User.query.filter_by(username=username).first():
-        flash("User with that username already exists.", 'negative')
-        return redirect(url_for('admin'))
+    # Query both User and UserProfile tables
+    users = User.query.all()
+    user_profiles = UserProfile.query.all()
 
-    # Add new user
-    password_hash = generate_password_hash(password)
-    new_user = User(username=username, password_hash=password_hash, first_name=first_name,
-                    last_name=last_name, email=email, phone=phone, institution=institution)
-    db.session.add(new_user)
-    db.session.commit()
-    flash("User added successfully.", 'netural')
+    # Create a list of user data combined with profile info
+    user_data = []
+    for user in users:
+        profile = UserProfile.query.filter_by(user_id=user.id).first()
+        user_data.append({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'role': user.role,
+            'firstname': profile.firstname if profile else None,
+            'surname': profile.surname if profile else None,
+            'phone_number': profile.phone_number if profile else None,
+            'type_of_institution': profile.type_of_institution if profile else None,
+            'name_of_institution': profile.name_of_institution if profile else None,
+            'participated_in_past_competitions': profile.participated_in_past_competitions if profile else None,
+            'preferred_coding_language': profile.preferred_coding_language if profile else None,
+            'preferred_ide': profile.preferred_ide if profile else None
+        })
+
+    return render_template('AdminPanel.html', users=user_data)
+
+@app.route('/admin/promote_user', methods=['POST'])
+@login_required
+def promote_user():
+    user_id = request.form.get('user_id')
+    user = User.query.get(user_id)
+    if user:
+        user.role = 'admin'  # Adjust as necessary
+        db.session.commit()
+        flash(f"User {user.username} promoted successfully.", 'positive')
+    else:
+        flash("User not found.", 'negative')
     return redirect(url_for('admin'))
 
-@app.route('/admin/delete_user/<int:user_id>', methods=['POST'])
+@app.route('/admin/demote_user', methods=['POST'])
 @login_required
-def delete_user(user_id):
-    #if not current_user.is_authenticated or current_user.username != "admin":
-    #    flash("You do not have permission to access this page.")
-    #   return redirect(url_for('dashboard'))
+def demote_user():
+    user_id = request.form.get('user_id')
+    user = User.query.get(user_id)
+    if user:
+        user.role = 'user'  # Adjust as necessary
+        db.session.commit()
+        flash(f"User {user.username} demoted successfully.", 'positive')
+    else:
+        flash("User not found.", 'negative')
+    return redirect(url_for('admin'))
 
-    # Find and delete the user
+@app.route('/admin/delete_user', methods=['POST'])
+@login_required
+def delete_user():
+    user_id = request.form.get('user_id')
     user = User.query.get(user_id)
     if user:
         db.session.delete(user)
         db.session.commit()
-        flash("User deleted successfully.", 'neutral')
+        flash(f"User {user.username} deleted successfully.", 'positive')
     else:
         flash("User not found.", 'negative')
     return redirect(url_for('admin'))
+
+
+@app.route('/admin/user_action', methods=['POST'])
+def user_action():
+    data = request.json
+    action = data.get('action')
+
+    if action == "add":
+        # Collect details from the request and create a new user
+        new_user = User(
+            username=data['username'],
+            password_hash=generate_password_hash(data['password']),
+            email=data['email'],
+            role=data.get('role', 'user')  # Default to 'user' if no role is provided
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"status": "success", "message": f"User {new_user.username} added successfully."})
+
+    user_id = data.get('user_id')
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"status": "error", "message": "User not found."})
+
+    if action == "promote":
+        user.role = 'admin'
+        db.session.commit()
+        return jsonify({"status": "success", "message": f"User {user.username} promoted to admin."})
+
+    elif action == "demote":
+        user.role = 'user'
+        db.session.commit()
+        return jsonify({"status": "success", "message": f"User {user.username} demoted to user."})
+
+    elif action == "delete":
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"status": "success", "message": f"User {user.username} deleted."})
+
+    # If action is invalid
+    return jsonify({"status": "error", "message": "Invalid action."})
 
 @app.route('/changepassword', methods=['GET', 'POST'])
 @login_required
@@ -238,18 +311,11 @@ def page_not_found(e):
     return render_template('error.html', error="404 Forbidden"), 404
 
 
-@app.route('/test_messages')
-def test_messages():
-    flash('Success! The operation completed successfully.', 'positive')
-    flash('This is a neutral message for your information.', 'neutral')
-    flash('Error! Something went wrong.', 'negative')
-    return redirect(url_for('some_view'))
-
-@app.route('/some_view')
-def some_view():
-    return render_template('base.html')
-
+# Run the create_admin_user function in app startup
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()  # Create database tables
+        db.drop_all()
+        db.create_all()  # Create tables if they don't exist
+        create_admin_user()  # Call the function to create the admin user
     app.run(debug=True)
+

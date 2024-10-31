@@ -23,9 +23,11 @@
             <a href="{{ url_for('repositories') }}">
                 <div class="Repositories"><img src="{{ url_for('static', filename='Images/Repository.png') }}" alt="Repository"></div>
             </a>
-            <a href="{{ url_for('admin') }}">
-                <div class="Admin"><img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin"></div>
-            </a>
+            {% if current_user.role == "admin user" %}
+                <a href="{{ url_for('admin') }}">
+                    <div class="Admin"><img src="{{ url_for('static', filename='Images/Admin.png') }}" alt="Admin"></div>
+                </a>
+            {% endif %}
             <a href="{{ url_for('settings') }}">
                 <div class="Settings"><img src="{{ url_for('static', filename='Images/Settings.png') }}" alt="Settings"></div>
             </a>

@@ -1,153 +1,124 @@
-{% extends 'base.html' %}
-
-{% block title %}
-    Admin Panel
-{% endblock %}
-
-{% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
+
     <div class="AdminPanelLayout">
         <h1>Admin Panel</h1>
 
         <!-- User Table -->
+        <div class="UsersTable">
+            <h2>All Users</h2>
+            <table class="TableLayout">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Institution</th>
+                        <th>Created At</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.surname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone_number }}</td>
+                        <td>{{ user.name_of_institution }}</td>
+                        <td>{{ user.created_at }}</td>
+                        <td>{{ user.last_login }}</td>
+                        <td>
+                            <button onclick="toggleDropdown({{ user.id }})" class="ModifyButton">Modify</button>
+                            <div id="dropdown-menu-{{ user.id }}" class="dropdown-content" style="display: none;">
+                                <form action="{{ url_for('user_action') }}" method="POST">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" name="action" value="edit">Edit User</button>
+                                    <button type="submit" name="action" value="promote">Promote User</button>
+                                    <button type="submit" name="action" value="demote">Demote User</button>
+                                    <button type="submit" name="action" value="delete">Delete User</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-            <div class="UsersTable">
-                <h2>All Users</h2>
-               
-                <table class="TableLayout">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Institution</th>
-                            <th>Created At</th>
-                            <th>Last Login</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Example rows - Replace with dynamic content -->
-                        <tr>
-                            <td>1</td>
-                            <td>jens@griebel.com</td>
-                            <td>Jens</td>
-                            <td>Griebel</td>
-                            <td>jens@griebel.com</td>
-                            <td>12344553</td>
-                            <td>NUST</td>
-                            <td>27-10-2003</td>
-                            <td>2 hours ago</td>
-                            <td><button onclick="myFunction()" class="ModifyButton">Modify</button></td>
-                            <div id="myDropdown" class="dropdown-content">
-                                <a href="#">Edit User</a>
-                                <a href="#">Promote User</a>
-                                <a href="#">Demote User</a>
-                                <a href="#">Delete User</a>
-                            </div>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>mark@beukes.com</td>
-                            <td>Mark</td>
-                            <td>Beukes</td>
-                            <td>mark@beukes.com</td>
-                            <td>1298162486</td>
-                            <td>Lingua</td>
-                            <td>27-10-2003</td>
-                            <td>2 hours ago</td>
-                            <div>
-                                <td><button onclick="myFunction()" class="ModifyButton">Modify</button></td>
-                                <div id="dropdown-menu" class="dropdown-content">
-                                    <a href="#">Edit User</a>
-                                    <a href="#">Promote User</a>
-                                    <a href="#">Demote User</a>
-                                    <a href="#">Delete User</a>
-                                </div>
-                            </div>
-                        </tr>
-                        <!-- More rows as needed -->
-                    </tbody>
-                </table>
-               
-            </div>
-        
-                <!-- Add New User Form -->
-                    <h2>Add New User</h2>
-                  <div class="AddNewUserLayout">
-                    <form action="add_user.php" method="POST">
-                        <div class="UsernameAdminPanel">
-                            <label for="Username" style="font-size: 2rem;">Username:</label>
-                            <input type="text" id="username" name="username" required  style="width: 30rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="PasswordAdminPanel">
-                            <label for="password" style="font-size: 2rem;">Password:</label>
-                            <input type="password" id="password" name="password" required style="width: 30.5rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="FirstNameAdminPanel">
-                            <label for="first_name" style="font-size: 2rem;">First Name:</label>
-                            <input type="text" id="first_name" name="first_name" required style="width: 29rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="LastNameAdminPanel">
-                            <label for="last_name" style="font-size: 2rem;">Last Name:</label>
-                            <input type="text" id="last_name" name="last_name" required style="width: 29.5rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="EmailAdminPanel">
-                            <label for="email" style="font-size: 2rem;">Email:</label>
-                            <input type="email" id="email" name="email" required style="width: 35rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="PhoneAdminPanel">
-                            <label for="phone" style="font-size: 2rem;">Phone Number:</label>
-                            <input type="tel" id="phone" name="phone" required style="width: 25.3rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <div class="InstitutionAdminPanel">
-                            <label for="institution" style="font-size: 2rem;">Institution:</label>
-                            <input type="text" id="institution" name="institution" required style="width: 29.5rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        
-                        <div class="RoleAdminPanel">
-                            <label for="Role" style="font-size: 2rem;">Role:</label>
-                            <input type="text" id="institution" name="institution" required style="width: 36rem; height: 2rem; border-radius:8px; border: none;">
-                        </div>
-                        <button class="AddUserButton" type="submit">Add User</button>
-                    </form>
+        <!-- Add New User Form -->
+        <h2>Add New User</h2>
+        <div class="AddNewUserLayout">
+            <form action="{{ url_for('user_action') }}" method="POST">
+                <div class="UsernameAdminPanel">
+                    <label for="username" style="font-size: 2rem;">Username:</label>
+                    <input type="text" id="username" name="username" required style="width: 30rem; height: 2rem; border-radius: 8px; border: none;">
                 </div>
-            
+                <div class="PasswordAdminPanel">
+                    <label for="password" style="font-size: 2rem;">Password:</label>
+                    <input type="password" id="password" name="password" required style="width: 30.5rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="FirstNameAdminPanel">
+                    <label for="first_name" style="font-size: 2rem;">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" required style="width: 29rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="LastNameAdminPanel">
+                    <label for="last_name" style="font-size: 2rem;">Last Name:</label>
+                    <input type="text" id="last_name" name="last_name" required style="width: 29.5rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="EmailAdminPanel">
+                    <label for="email" style="font-size: 2rem;">Email:</label>
+                    <input type="email" id="email" name="email" required style="width: 35rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="PhoneAdminPanel">
+                    <label for="phone" style="font-size: 2rem;">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required style="width: 25.3rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="InstitutionAdminPanel">
+                    <label for="institution" style="font-size: 2rem;">Institution:</label>
+                    <input type="text" id="institution" name="institution" required style="width: 29.5rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <div class="RoleAdminPanel">
+                    <label for="role" style="font-size: 2rem;">Role:</label>
+                    <input type="text" id="role" name="role" required style="width: 36rem; height: 2rem; border-radius: 8px; border: none;">
+                </div>
+                <button class="AddUserButton" type="submit">Add User</button>
+            </form>
+        </div>
     </div>
+
     <script>
-            function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
+        function toggleDropdown(userId) {
+            document.getElementById(`dropdown-menu-${userId}`).classList.toggle("show");
         }
 
         // Close the dropdown menu if the user clicks outside of it
         window.onclick = function(event) {
-        if (!event.target.matches('.ModifyButton')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
+            if (!event.target.matches('.ModifyButton')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
             }
         }
-        }
-        
-        document.querySelectorAll('.sidebar a').forEach(item => {
-    item.addEventListener('click', () => {
-        // Remove 'active' class from all items
-        document.querySelectorAll('.sidebar a').forEach(i => i.classList.remove('active'));
-        
-        // Add 'active' class to the clicked item
-        item.classList.add('active');
-    });
-    });
 
+        document.querySelectorAll('.sidebar a').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove 'active' class from all items
+                document.querySelectorAll('.sidebar a').forEach(i => i.classList.remove('active'));
+                // Add 'active' class to the clicked item
+                item.classList.add('active');
+            });
+        });
     </script>
 {% endblock %}

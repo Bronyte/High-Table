@@ -8,14 +8,15 @@ db = SQLAlchemy()
 class User(UserMixin, db.Model):
     __tablename__ = 'user_credentials'
     
-    id = db.Column(db.Integer, primary_key=True)  # User_ID
-    username = db.Column(db.String(150), unique=True, nullable=False)  # Username
-    email = db.Column(db.String(150), unique=True, nullable=False)  # Email
-    password_hash = db.Column(db.String(128), nullable=False)  # Password
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)  # created_at
-    last_login = db.Column(db.DateTime, nullable=True)  # last_login
-
-    profile = db.relationship('UserProfile', backref='user', uselist=False)  # One-to-one relationship
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    last_login = db.Column(db.DateTime, nullable=True)
+    role = db.Column(db.String(20), nullable=False, default='user')
+    
+    profile = db.relationship('UserProfile', backref='user', uselist=False)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -26,6 +27,7 @@ class User(UserMixin, db.Model):
     def update_last_login(self):
         self.last_login = datetime.utcnow()
         db.session.commit()
+
 
 
 class UserProfile(db.Model):
