@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="ViewProfileLayout">
+        <div class="ProfilePic"><img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile"></div>
+        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+        <div class="InstitutionViewProfile">{{ user.institution }}</div>
+        <div class="Email-Phone">
+            <p class="EmailViewProfile">{{ user.email }}</p>
+            <p class="PhoneViewProfile">{{ user.phone }}</p>
+        </div>
+        <div class="Info">
+            <p><span>Preferred Coding:</span> {{ user.preferred_coding }}</p>
+            <p><span>Preferred IDE:</span> {{ user.preferred_ide }}</p>
+        </div>
+        <div class="Message">
+            {{ user.message }}
+        </div>
+        <button class="BackButton" onclick="window.history.back();">BACK</button>
+    </div>
+{% endblock %}
+</body>
+</html>

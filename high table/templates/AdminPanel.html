@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
 
+{% block content %}
+<body>
     <div class="AdminPanelLayout">
         <h1>Admin Panel</h1>
 
@@ -28,23 +35,20 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.firstname }}</td>
-                        <td>{{ user.surname }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.phone_number }}</td>
-                        <td>{{ user.name_of_institution }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.institution }}</td>
                         <td>{{ user.created_at }}</td>
                         <td>{{ user.last_login }}</td>
                         <td>
-                            <button onclick="toggleDropdown({{ user.id }})" class="ModifyButton">Modify</button>
-                            <div id="dropdown-menu-{{ user.id }}" class="dropdown-content" style="display: none;">
-                                <form action="{{ url_for('user_action') }}" method="POST">
-                                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                                    <button type="submit" name="action" value="edit">Edit User</button>
-                                    <button type="submit" name="action" value="promote">Promote User</button>
-                                    <button type="submit" name="action" value="demote">Demote User</button>
-                                    <button type="submit" name="action" value="delete">Delete User</button>
-                                </form>
+                            <button onclick="toggleDropdown(event)" class="ModifyButton">Modify</button>
+                            <div class="dropdown-content">
+                                <a href="#" onclick="openWindow('{{ url_for('register', user_id=user.id) }}')">Edit User</a>
+                                <a href="{{ url_for('promote_user', user_id=user.id) }}">Promote User</a>
+                                <a href="{{ url_for('demote_user', user_id=user.id) }}">Demote User</a>
+                                <a href="{{ url_for('delete_user', user_id=user.id) }}">Delete User</a>
                             </div>
                         </td>
                     </tr>
@@ -53,72 +57,31 @@
             </table>
         </div>
 
-        <!-- Add New User Form -->
+        <!-- Add New User Button -->
         <h2>Add New User</h2>
-        <div class="AddNewUserLayout">
-            <form action="{{ url_for('user_action') }}" method="POST">
-                <div class="UsernameAdminPanel">
-                    <label for="username" style="font-size: 2rem;">Username:</label>
-                    <input type="text" id="username" name="username" required style="width: 30rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="PasswordAdminPanel">
-                    <label for="password" style="font-size: 2rem;">Password:</label>
-                    <input type="password" id="password" name="password" required style="width: 30.5rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="FirstNameAdminPanel">
-                    <label for="first_name" style="font-size: 2rem;">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" required style="width: 29rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="LastNameAdminPanel">
-                    <label for="last_name" style="font-size: 2rem;">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" required style="width: 29.5rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="EmailAdminPanel">
-                    <label for="email" style="font-size: 2rem;">Email:</label>
-                    <input type="email" id="email" name="email" required style="width: 35rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="PhoneAdminPanel">
-                    <label for="phone" style="font-size: 2rem;">Phone Number:</label>
-                    <input type="tel" id="phone" name="phone" required style="width: 25.3rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="InstitutionAdminPanel">
-                    <label for="institution" style="font-size: 2rem;">Institution:</label>
-                    <input type="text" id="institution" name="institution" required style="width: 29.5rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <div class="RoleAdminPanel">
-                    <label for="role" style="font-size: 2rem;">Role:</label>
-                    <input type="text" id="role" name="role" required style="width: 36rem; height: 2rem; border-radius: 8px; border: none;">
-                </div>
-                <button class="AddUserButton" type="submit">Add User</button>
-            </form>
-        </div>
+        <button onclick="openWindow('{{ url_for('register') }}')">Add User</button>
     </div>
 
     <script>
-        function toggleDropdown(userId) {
-            document.getElementById(`dropdown-menu-${userId}`).classList.toggle("show");
+        function toggleDropdown(event) {
+            const dropdown = event.target.nextElementSibling;
+            dropdown.classList.toggle("show");
+        }
+
+        function openWindow(url) {
+            window.open(url, '_blank', 'width=800,height=600'); // Open in new window
         }
 
         // Close the dropdown menu if the user clicks outside of it
         window.onclick = function(event) {
             if (!event.target.matches('.ModifyButton')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
+                const dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    if (dropdowns[i].classList.contains('show')) {
+                        dropdowns[i].classList.remove('show');
                     }
                 }
             }
         }
-
-        document.querySelectorAll('.sidebar a').forEach(item => {
-            item.addEventListener('click', () => {
-                // Remove 'active' class from all items
-                document.querySelectorAll('.sidebar a').forEach(i => i.classList.remove('active'));
-                // Add 'active' class to the clicked item
-                item.classList.add('active');
-            });
-        });
     </script>
 {% endblock %}

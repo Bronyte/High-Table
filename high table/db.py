@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     last_login = db.Column(db.DateTime, nullable=True)
     role = db.Column(db.String(20), nullable=False, default='user')
     
-    profile = db.relationship('UserProfile', backref='user', uselist=False)
+    profile = db.relationship('UserProfile', backref='user', uselist=False)  # String reference
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -29,20 +29,19 @@ class User(UserMixin, db.Model):
         db.session.commit()
 
 
-
 class UserProfile(db.Model):
-    __tablename__ = 'user_profile'
-    
-    id = db.Column(db.Integer, primary_key=True)  # Profile_ID
-    user_id = db.Column(db.Integer, db.ForeignKey('user_credentials.id'), nullable=False)  # User_ID
-    firstname = db.Column(db.String(150), nullable=False)  # Firstname
-    surname = db.Column(db.String(150), nullable=False)  # Surname
-    phone_number = db.Column(db.String(20))  # Phone_Number
-    type_of_institution = db.Column(db.String(150))  # Type_of_Institution
-    name_of_institution = db.Column(db.String(150))  # Name_of_Institution
-    participated_in_past_competitions = db.Column(db.Boolean, default=False)  # Participated_in_past_Competitions
-    preferred_coding_language = db.Column(db.String(50))  # Preferred_Coding_Language
-    preferred_ide = db.Column(db.String(50))  # Preferred_IDE
+    __tablename__ = 'user_profiles'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user_credentials.id'), primary_key=True)  # Make sure this matches the foreign key
+    firstname = db.Column(db.String(100))
+    surname = db.Column(db.String(100))
+    phone_number = db.Column(db.String(20))
+    type_of_institution = db.Column(db.String(50))
+    name_of_institution = db.Column(db.String(100))
+    participated_in_past_competitions = db.Column(db.Boolean, default=False)
+    preferred_coding_language = db.Column(db.String(100))
+    preferred_ide = db.Column(db.String(100))
+    message = db.Column(db.Text)
 
 
 class Chat(db.Model):
