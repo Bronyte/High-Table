@@ -1,23 +1,45 @@
+<<<<<<< HEAD
+from flask import Flask, redirect, url_for, request, render_template
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+=======
 from flask import Flask, jsonify, redirect, url_for, request, render_template, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 from db import db, User, UserProfile  # Import the database and other models
 from mail import MailService
-
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
 app = Flask(__name__)
+<<<<<<< HEAD
+app.secret_key = 'your_secret_key'  # for securely signing the session cookie
+=======
 app.secret_key = 'your_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
+<<<<<<< HEAD
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'  # route to redirect to for unauthenticated users
+=======
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Use SQLite for simplicity
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
+<<<<<<< HEAD
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+=======
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
+<<<<<<< HEAD
+    # Your user methods here
+=======
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -69,7 +91,14 @@ def home():
     return render_template('LoginRegistration.html')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
+<<<<<<< HEAD
+@login_manager.user_loader
+def load_user(user_id):
+    # Fetch the user from your database
+    return User(user_id)
+=======
     if current_user.is_authenticated:
         # Redirect to the dashboard if the user is logged in
         return redirect(url_for('dashboard'))
@@ -90,7 +119,30 @@ def login():
         flash('Invalid username or password.', 'negative')
         return redirect(url_for('login'))
     return render_template('login.html')
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
 
+<<<<<<< HEAD
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Check credentials (e.g., user lookup)
+        user = User(id=1)
+        login_user(user)
+        return redirect(url_for('dashboard'))
+    return render_template('login.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return f"Welcome, {current_user.id}!"
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+=======
         
 @app.route('/logout')
 @login_required
@@ -357,3 +409,5 @@ if __name__ == "__main__":
         create_admin_user()  # Call the function to create the admin user
     app.run(debug=True)
 
+
+>>>>>>> cc9918e817416fd5c0ea1bbb18bab959ebf771a7
