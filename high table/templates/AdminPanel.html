@@ -42,7 +42,7 @@
                         <td>
                             <button onclick="toggleDropdown(event)" class="ModifyButton">Modify</button>
                             <div class="dropdown-content">
-                                <a href="#" onclick="openWindow('{{ url_for('register', user_id=user.id) }}')">Edit User</a>
+                                <a href="{{ url_for('register', user_id=user.id) }}">Edit User</a>
                                 <a href="{{ url_for('promote_user', user_id=user.id) }}">Promote User</a>
                                 <a href="{{ url_for('demote_user', user_id=user.id) }}">Demote User</a>
                                 <a href="{{ url_for('delete_user', user_id=user.id) }}">Delete User</a>

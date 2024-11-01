@@ -69,6 +69,10 @@ def home():
     return render_template('LoginRegistration.html')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    if current_user.is_authenticated:
+        # Redirect to the dashboard if the user is logged in
+        return redirect(url_for('dashboard'))
     if request.method == 'POST':
         login_input = request.form['username']  # This can be either the username or email
         password = request.form['password']
@@ -85,8 +89,9 @@ def login():
         
         flash('Invalid username or password.', 'negative')
         return redirect(url_for('login'))
-    
     return render_template('login.html')
+
+        
 @app.route('/logout')
 @login_required
 def logout():
@@ -135,23 +140,6 @@ def profile():
 
     # If the request is GET, render the profile page
     return render_template('ViewProfile.html', user=user_profile)
-@app.route('/viewprofile')
-@login_required
-def view_profile():
-    # Retrieve the user's profile from the database
-    profile = UserProfile.query.filter_by(user_id=current_user.id).first()
-
-    if not profile:
-        flash('Profile not found!', 'negative')
-        return redirect(url_for('dashboard'))
-
-    # Render the profile view template with the retrieved profile data
-    return render_template('ViewProfile.html', profile=profile)
-
-
-
-    logout_user()
-    return redirect(url_for('login'))
 # Change Info
 @app.route('/changepassword', methods=['GET', 'POST'])
 @login_required
@@ -197,8 +185,6 @@ def change_profile():
 
     # Render the profile change form with existing user data
     return render_template('ChangeProfile.html', profile=profile)
-
-
 # Dashboard routes
 @app.route('/dashboard')
 @login_required
@@ -308,7 +294,7 @@ def demote_user(user_id):
         flash('User not found.', 'negative')
 
     return redirect(url_for('admin'))
-@app.route('/add_user<int:user_id>', methods=['POST'])
+@app.route('/add_user', methods=['POST'])
 @login_required
 def add_user():
     if current_user.role != 'admin user':
