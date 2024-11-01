@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
+{% block title %}
+    View Profile
+{% endblock %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
     <div class="ViewProfileLayout">
         <div class="ProfilePic"><img src="{{ url_for('static', filename='Images/Profile.png') }}" alt="Profile"></div>
         <h2>{{ user.first_name }} {{ user.last_name }}</h2>
@@ -27,6 +28,4 @@
         </div>
         <button class="BackButton" onclick="window.history.back();">BACK</button>
     </div>
-</body>
-</html>
 {% endblock %}

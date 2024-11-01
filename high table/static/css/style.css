@@ -12,7 +12,9 @@ body {
     background-image: url(../images/wall-grey-background-world-map-the-continent-hd-wallpaper-preview.jpg);
     background-repeat:no-repeat ; /* Background image does not repeat*/
     background-size: cover;/* Background image cover screen*/
+    z-index: 1;
 }
+
 
 .LoginTextBox, .RegistrationTextBox, .PasswordTextBox {
     font-size: 2rem; 
@@ -226,7 +228,7 @@ label {
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
     opacity: 0.6;
-    
+    z-index: 100;
 }
 .sidebar:hover {
     opacity: 0.9; /* Slightly Opaque on hover */
@@ -597,6 +599,7 @@ tr{/*row in cells*/
 
 .ViewPofileLayout{
     margin-top: 1rem;
+    margin-left: 40rem;
     width: 90%;
     height: 90vh;
     padding: 20px;
@@ -606,6 +609,7 @@ tr{/*row in cells*/
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     opacity: 0.9;
+    position: absolute;
 }
 .ProfilePic {
     padding: 3rem;
@@ -668,7 +672,8 @@ h2 {
 
 /********* Setting CSS ************/
 
-.SettingsContainer{  
+.SettingsContainer{ 
+    width: auto; 
     margin-left: 43rem;
     margin-top: 1rem;
     text-align: center;
@@ -676,10 +681,12 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    position: absolute;
+    top: 3rem;
 }
 
 .menu-button {
-    width: 40%;
+    width: auto;
     background-color: #1B2C5D;
     color: #fff;
     border: none;
@@ -694,16 +701,18 @@ h2 {
     opacity: 0.9;
 }
 .SettingsBackButton {
-    margin-left: 51rem;
     width: 13rem;
     height: 5rem;
+    text-align: center;
     background-color: #B01212;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 3rem;
-  
+    position: absolute;
+    bottom: 30px;
+    left: 35%;
 }
 
 

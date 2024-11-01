@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block title %}
+    Settings
+{% endblock %}
+
+
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,10 +17,10 @@
 <body>
     <div class="SettingsLayout">
         <div class="SettingsContainer">
-            <button class="menu-button" onclick="location.href='{{ url_for('view_profile') }}'">Profile</button>
-            <button class="menu-button" >Privacy</button>
-            <button class="menu-button">Password</button>
-            <button class="menu-button">Notifications</button>
+            <button class="menu-button" onclick="location.href='{{ url_for('profile') }}'">Profile</button>
+            <button class="menu-button" onclick="location.href='{{ url_for('privacy_policy') }}'">Privacy</button>
+            <button class="menu-button" onclick="location.href='{{ url_for('change_password') }}'">Password</button>
+            <button class="menu-button" >Notifications</button>
         </div>
         <a class="SettingsBackButton" href="{{ url_for('dashboard') }}">BACK</a>
     </div>

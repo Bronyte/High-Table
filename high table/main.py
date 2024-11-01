@@ -331,6 +331,12 @@ def delete_user(user_id):
 
     return redirect(url_for('admin'))
 
+# Policies
+@app.route('/privacy')
+@login_required
+def privacy_policy():
+    return render_template('Privacy.html')
+
 
 # Error Handling
 @app.errorhandler(403)
